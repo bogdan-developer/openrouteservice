@@ -108,15 +108,16 @@ public class BuildProperties {
                         }
                         break;
                     case OSM_ID:
-                        if (encodedValues.getOsmWayId() == null) {
-                            encodedValues.setOsmWayId(true);
-                        }
+                        handleOsmId();
                         break;
                     case WAY_CATEGORY:
                         handleWayCategory();
                         break;
                     case WAY_SURFACE_TYPE:
                         handleWaySurfaceType();
+                        break;
+                    case TOLLWAYS:
+                        handleTollways();
                         break;
                     default:
                         storage.initialize(extendedStorageName);
@@ -169,6 +170,12 @@ public class BuildProperties {
         }
     }
 
+    private void handleOsmId() {
+        if (encodedValues.getOsmWayId() == null) {
+            encodedValues.setOsmWayId(true);
+        }
+    }
+
     private void handleWayCategory() {
         if (encodedValues.getHighway() == null) {
             encodedValues.setHighway(true);
@@ -188,6 +195,12 @@ public class BuildProperties {
         }
         if (encodedValues.getWayType() == null) {
             encodedValues.setWayType(true);
+        }
+    }
+
+    private void handleTollways() {
+        if (encodedValues.getToll() == null) {
+            encodedValues.setToll(true);
         }
     }
 
