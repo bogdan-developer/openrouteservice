@@ -11,6 +11,7 @@ import com.graphhopper.routing.weighting.ShortestWeighting;
 import com.graphhopper.routing.weighting.Weighting;
 import com.graphhopper.storage.CHConfig;
 import com.graphhopper.storage.RAMDirectory;
+import org.heigit.ors.routing.RoutingProfileType;
 import org.heigit.ors.routing.graphhopper.extensions.ORSGraphHopperStorage;
 import org.heigit.ors.routing.graphhopper.extensions.core.CoreLMConfig;
 import org.heigit.ors.routing.graphhopper.extensions.core.CoreLMOptions;
@@ -60,7 +61,7 @@ class CoreLMPreparationHandlerTest {
         List<String> tmpCoreLMSets = Arrays.asList(coreLMSets.split(";"));
         CoreLMOptions coreLMOptions = coreLMhandler.getCoreLMOptions();
         coreLMOptions.setRestrictionFilters(tmpCoreLMSets);
-        coreLMOptions.createRestrictionFilters(g);
+        coreLMOptions.createRestrictionFilters(g, RoutingProfileType.DRIVING_CAR);
         coreLMhandler.createPreparations(g, null);
         assertEquals(1, coreLMhandler.getPreparations().get(0).getLandmarkStorage().getFactor(), .1);
         assertEquals(0.3, coreLMhandler.getPreparations().get(1).getLandmarkStorage().getFactor(), .1);

@@ -38,6 +38,7 @@ import com.graphhopper.storage.index.LocationIndex;
 import com.graphhopper.util.*;
 import com.graphhopper.util.details.PathDetailsBuilderFactory;
 import org.geotools.feature.SchemaException;
+import org.heigit.ors.common.EncoderNameEnum;
 import org.heigit.ors.common.TravelRangeType;
 import org.heigit.ors.config.EngineProperties;
 import org.heigit.ors.config.profile.ProfileProperties;
@@ -433,14 +434,14 @@ public class ORSGraphHopper extends GraphHopperGtfs {
             return;
 
         CoreLMOptions coreLMOptions = coreLMPreparationHandler.getCoreLMOptions();
-        coreLMOptions.createRestrictionFilters(getGraphHopperStorage());
 
         for (LMProfile lmProfile : coreLMPreparationHandler.getLMProfiles()) {
             if (lmProfile.usesOtherPreparation())
                 continue;
             Profile profile = profilesByName.get(lmProfile.getProfile());
             Weighting weighting = createWeighting(profile, new PMap(), true);
-            for (LMEdgeFilterSequence edgeFilter : coreLMOptions.getFilters()) {
+            int profileType = EncoderNameEnum.getFromEncoderName(profile.getVehicle());
+            for (LMEdgeFilterSequence edgeFilter: coreLMOptions.createRestrictionFilters(getGraphHopperStorage(), profileType)) {
                 CoreLMConfig coreLMConfig = new CoreLMConfig(profile.getName(), weighting);
                 coreLMConfig.setEdgeFilter(edgeFilter);
                 coreLMPreparationHandler.addLMConfig(coreLMConfig);
