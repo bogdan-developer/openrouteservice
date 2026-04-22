@@ -55,6 +55,8 @@ public class EncodedValuesProperties {
     private Boolean maxWeight;
     @JsonProperty(MaxWidth.KEY)
     private Boolean maxWidth;
+    @JsonProperty(HillIndex.KEY)
+    private Boolean hillIndex;
 
     public EncodedValuesProperties() {
     }
@@ -85,6 +87,7 @@ public class EncodedValuesProperties {
         properties.put(MaxLength.KEY, maxLength);
         properties.put(MaxWeight.KEY, maxWeight);
         properties.put(MaxWidth.KEY, maxWidth);
+        properties.put(HillIndex.KEY, hillIndex);
 
         return properties;
     }
@@ -121,5 +124,6 @@ public class EncodedValuesProperties {
         maxLength = ofNullable(this.maxLength).orElse(other.maxLength);
         maxWeight = ofNullable(this.maxWeight).orElse(other.maxWeight);
         maxWidth = ofNullable(this.maxWidth).orElse(other.maxWidth);
+        hillIndex = ofNullable(this.hillIndex).orElse(other.hillIndex);
     }
 }

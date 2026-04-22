@@ -118,6 +118,11 @@ public class BuildProperties {
                     case WAY_SURFACE_TYPE:
                         handleWaySurfaceType();
                         break;
+                    case HILL_INDEX:
+                        if (encodedValues.getHillIndex() == null) {
+                            encodedValues.setHillIndex(true);
+                        }
+                        break;
                     default:
                         storage.initialize(extendedStorageName);
                         this.extStorages.put(key, storage);
