@@ -49,7 +49,7 @@ public class ExtraInfoProcessor implements PathProcessor {
     private GreenIndexGraphStorage extGreenIndex;
     private NoiseIndexGraphStorage extNoiseIndex;
     private TrailDifficultyScaleGraphStorage extTrailDifficulty;
-    private HillIndexGraphStorage extHillIndex;
+    private IntEncodedValue hillIndexEnc;
     private RoadAccessRestrictionsGraphStorage extRoadAccessRestrictions;
     private BordersGraphStorage extCountryTraversalInfo;
     private CsvGraphStorage extCsvData;
@@ -201,7 +201,7 @@ public class ExtraInfoProcessor implements PathProcessor {
 
             if (includeExtraInfo(extraInfo, RouteExtraInfoFlag.TRAIL_DIFFICULTY)) {
                 extTrailDifficulty = GraphStorageUtils.getGraphExtension(graphHopperStorage, TrailDifficultyScaleGraphStorage.class);
-                extHillIndex = GraphStorageUtils.getGraphExtension(graphHopperStorage, HillIndexGraphStorage.class);
+                hillIndexEnc = encoder.hasEncodedValue(HillIndex.KEY) ? encoder.getIntEncodedValue(HillIndex.KEY) : null;
 
                 trailDifficultyInfo = new RouteExtraInfo("traildifficulty");
                 trailDifficultyInfoBuilder = new AppendableRouteExtraInfoBuilder(trailDifficultyInfo);
@@ -474,13 +474,7 @@ public class ExtraInfoProcessor implements PathProcessor {
         if (trailDifficultyInfoBuilder != null) {
             int value = 0;
             if (RoutingProfileType.isCycling(profileType)) {
-                boolean uphill = false;
-                if (extHillIndex != null) {
-                    boolean revert = edge.getBaseNode() > edge.getAdjNode();
-                    int hillIndex = extHillIndex.getEdgeValue(EdgeIteratorStateHelper.getOriginalEdge(edge), revert, buffer);
-                    if (hillIndex > 0)
-                        uphill = true;
-                }
+                boolean uphill = hillIndexEnc != null && edge.get(hillIndexEnc) > 0;
                 value = extTrailDifficulty.getMtbScale(EdgeIteratorStateHelper.getOriginalEdge(edge), buffer, uphill);
             } else if (RoutingProfileType.isWalking(profileType))
                 value = extTrailDifficulty.getHikingScale(EdgeIteratorStateHelper.getOriginalEdge(edge), buffer);
